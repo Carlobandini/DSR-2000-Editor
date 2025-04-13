@@ -1,7 +1,7 @@
 # DSR-2000-Editor
 YAMAHA DSR-2000 EDITOR
 
-THE SYNTHESIZER
+THE SYNTHESIZER\n
 The DSR-2000 is a very uncommon FM keyboard from 1987.
 Unlike the SY and DX series, it was not oriented to a professional market, having a couple of speakers, a rhythm section and friendly user interface with limited synthesizing capabilities instead of a full complex editor like the DX series.
 However, despite the amateur appearance of the DSR-2000, it was more powerful than the DX series in some areas, counting with some amazing features:
