@@ -1,0 +1,11 @@
+# Contents
+
+README -> A description of the project.
+LICENSE -> Apache 2.0 license explanation.
+DSR2000.app.zip -> Mac arm binary (app for M series). It probably don't works without allowing the access in the system settings.
+SOURCE -> Python source file, needs the following dependencies: 
+  - Mido
+  - Mido backends rtmidi
+  - dearpygui
+  - json
+  - numpy
