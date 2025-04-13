@@ -49,7 +49,7 @@ If the selected voices in the synthesizer and in the editor are different, the s
 The operators can be copied / pasted to make the edition easier.
 
 
-The level sliders of the pitch envelope can be reset to zero clicking on them with the command key pressed (mac). This feature has not been tested on Windows.
+The level sliders of the pitch envelope can be reset to zero clicking on them with the command key (mac) or Ctrl key (Win) pressed. This feature has not been tested on Windows.
 
 
 Final note: 
