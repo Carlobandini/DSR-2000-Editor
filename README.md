@@ -13,7 +13,7 @@ However, despite the amateur PSR-ish appearance of the DSR-2000, it was more pow
 * YM 2414 / OPZ, 4 Operators FM sound chip with 8 different waveforms (TX81Z, DX11 and others).
 * Stereo DAC.
 * Integrated BBD chorus.
-* Full access to the YM parameters by Sysex.
+* Full access to the YM edition parameters by Sysex.
 * Tape / Rom pack / Sysex data bulk.
 * Stereo EFX loop Inputs and Outputs.
 
