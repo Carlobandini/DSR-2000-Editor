@@ -13,7 +13,8 @@ However, despite the amateur PSR'ish appearance of the DSR-2000, it was more pow
 * Stereo DAC.
 * Integrated BBD chorus.
 * Full access to the YM registers by Sysex.
-* EFX loop Input / Output.
+* Tape / Rom pack / Sysex data bulk.
+* Stereo EFX loop Inputs and Outputs.
 
 
 THE EDITOR:
