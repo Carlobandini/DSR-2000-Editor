@@ -1,7 +1,7 @@
 # DSR-2000-Editor
 YAMAHA DSR-2000 EDITOR
 
-THE SYNTHESIZER\n
+#THE SYNTHESIZER
 The DSR-2000 is a very uncommon FM keyboard from 1987.
 Unlike the SY and DX series, it was not oriented to a professional market, having a couple of speakers, a rhythm section and friendly user interface with limited synthesizing capabilities instead of a full complex editor like the DX series.
 However, despite the amateur appearance of the DSR-2000, it was more powerful than the DX series in some areas, counting with some amazing features:
@@ -13,7 +13,7 @@ However, despite the amateur appearance of the DSR-2000, it was more powerful th
 * EFX loop Input / Output.
 
 
-THE EDITOR:
+#THE EDITOR:
 Basically, this app uses sysex messages to extends the DSR-2000 synthesizing capabilities to all the YM2414 parameters like the DX series do, including full access to each operator separately, waveforms, tuning, key scaling, amplitude and pitch envelopes, full LFO control, algorithm and feedback. 
 
 The editor cannot be operated without connecting to the keyboard and loading a bank. To load the user voices bank from the keyboard, use the "Data -> Request bank" menu from the menu bar in the top of the screen, and follow the instructions on the popup window.
