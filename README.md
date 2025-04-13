@@ -42,7 +42,9 @@ The operators can be copied / pasted to make the edition easier.
 The level sliders of the pitch envelope can be reset to zero clicking on them with the command key pressed (mac). This feature has not been tested on Windows.
 
 
-Final note: This development has been hard due to the lack of documentation and may be incomplete. Please contact to carlobandini@gmail.com if you have any documentation or information about the DSR-2000 sysex parameters. It may help to improve this editor.
+Final note: This development has been hard due to the lack of documentation and may be incomplete. 
+
+Please contact to carlobandini@gmail.com if you have any documentation or information about the DSR-2000 sysex parameters. It may help to improve this editor.
 
 
 
