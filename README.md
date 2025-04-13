@@ -9,7 +9,7 @@ Unlike the DX series, it was not oriented to a professional market, having a cou
 However, despite the amateur PSR'ish appearance of the DSR-2000, it was more powerful than the DX series in some areas, counting with some amazing features:
 
 
-* YM 2414 / OPZ FM sound chip with 8 different waveforms (TX81Z, DX11 and others).
+* YM 2414 / OPZ, 4 Operators FM sound chip with 8 different waveforms (TX81Z, DX11 and others).
 * Stereo DAC.
 * Integrated BBD chorus.
 * Full access to the YM registers by Sysex.
