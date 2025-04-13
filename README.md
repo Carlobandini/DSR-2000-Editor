@@ -4,9 +4,10 @@ YAMAHA DSR-2000 EDITOR
 THE SYNTHESIZER
 
 The DSR-2000 is an interesting FM keyboard from 1987. A bit in the middle of the PSR and DX series.
+
 Unlike the DX series, it was not oriented to a professional market, having a couple of speakers, a rhythm section and friendly user interface with limited synthesizing capabilities instead of a full complex editor.
 
-However, despite the amateur PSR'ish appearance of the DSR-2000, it was more powerful than the DX series in some areas, counting with some amazing features:
+However, despite the amateur PSR-ish appearance of the DSR-2000, it was more powerful than the DX series in some areas, counting with some amazing features:
 
 
 * YM 2414 / OPZ, 4 Operators FM sound chip with 8 different waveforms (TX81Z, DX11 and others).
