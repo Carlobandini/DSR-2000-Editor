@@ -2,10 +2,10 @@
 
 README -> A description of the project.
 LICENSE -> Apache 2.0 license explanation.
-DSR2000.app.zip -> Mac silicon app. It probably don't works without allowing the access in the system settings.
+Mac app.zip -> Mac silicon app. It probably don't works without allowing the access in the system settings.
+Windows app -> Windows 64bit app. Compressed.
 SOURCE -> Python source file, needs the following dependencies: 
-  - Mido
-  - Mido backends rtmidi
+  - Python-rtmidi
   - dearpygui
   - json
   - numpy
