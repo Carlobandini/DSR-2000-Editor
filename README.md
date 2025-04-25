@@ -23,7 +23,7 @@ THE EDITOR:
 Basically, this app uses sysex messages to extend the DSR-2000 synthesizing capabilities to all the YM2414 parameters like the DX series do, including full access to each operator separately, waveforms, tuning, key scaling, amplitude and pitch envelopes, full LFO control, algorithm and feedback. 
 
 
-The source code and mac silicon binaries can be downloaded from this folder, I will release the windows version in a few days.
+The source code, Windows and mac silicon binaries can be downloaded from this folders.
 
 
 The editor cannot be operated without connecting to the keyboard and loading a bank. To load the user voices bank from the keyboard, use the "Data -> Request bank" menu from the menu bar in the top of the screen, and follow the instructions on the popup window.
