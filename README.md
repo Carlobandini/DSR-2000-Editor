@@ -26,17 +26,17 @@ Basically, this app uses sysex messages to extend the DSR-2000 synthesizing capa
 The source code, Windows and mac silicon binaries can be downloaded from this folders.
 
 
-The editor cannot be operated without connecting to the keyboard and loading a bank. To load the user voices bank from the keyboard, use the "Data -> Request bank" menu from the menu bar in the top of the screen, and follow the instructions on the popup window.
+The editor cannot be operated without connecting to the keyboard and loading a bank. To load the user voices bank from the keyboard, use the "Data -> Request bank" menu from the menu bar in the top of the screen, and follow the instructions from the popup window.
 
 
 Since the editor still allows to modify some of the keyboard voice data parameters, some others have been disabled to avoid conflicts with the advanced edition parameters.
 
 
-A set of cursor controls is implemented in the right-bottom part of the screen to access the keyboard voice data parameters. It also responds to the computer keyboard cursor keys.
+A set of cursor controls is implemented in the right-bottom area of the screen to access the keyboard voice data parameters. It also responds to the computer keyboard cursor keys.
 
 
 Any of the 40 user presets can be edited, loaded and saved from/to disk.
-The banks cannalso be loaded or saved fron/to disk.
+The banks can also be loaded or saved from/to disk.
 Please note that when a paramter is edited, the voice is automatically saved into its voice preset number.
 This happens due to the characteristics of the sysex implementation in the DSR-2000.
 
