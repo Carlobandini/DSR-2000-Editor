@@ -38,9 +38,9 @@ A set of cursor controls is implemented in the right-bottom area of the screen t
 Any of the 40 user presets can be edited, loaded and saved from/to disk.
 The banks can also be loaded or saved from/to disk.
 Please note that when a paramter is edited, the voice is automatically saved into its voice preset number.
-This happens due to the characteristics of the sysex implementation in the DSR-2000.
+This happens due to the sysex implementation of the DSR-2000.
 
-A numeric pad is located in the bottom right area of the screen, next to the cursor controls, to change the voice number. Please note that only the user voices can be selected.
+A numeric pad is located at the bottom right area of the screen, next to the cursor controls, to change the voice number. Please note that only the user voices can be selected.
 
 
 If the selected voices in the synthesizer and in the editor are different, the synthesizer voice will change to match the editor voice after editing any parameter.
