@@ -56,5 +56,7 @@ Final note:
 This development has been hard due to the lack of documentation and may be incomplete. 
 Please contact to carlobandini@gmail.com if you have any documentation or information about the DSR-2000 sysex parameters. It may help to improve this editor.
 
+More info:
+https://synth-editors.carlobandini.com/
 
 
