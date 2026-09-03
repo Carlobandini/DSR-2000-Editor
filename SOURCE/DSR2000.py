@@ -20,6 +20,7 @@ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 import rtmidi
 import sys
 import os
+import shutil
 import dearpygui.dearpygui as dpg
 import filedialpy
 import time
@@ -29,14 +30,30 @@ import numpy as np
 
 ### Set path
 application_path = os.path.dirname(os.path.abspath(__file__))
-os.chdir(application_path) 
+os.chdir(application_path)
+
+# Cuando está empaquetado (.exe / .app), los archivos dentro del bundle son de solo lectura.
+# Guardamos la config MIDI en un archivo escribible junto al ejecutable / .app.
+if getattr(sys, 'frozen', False):
+    if sys.platform == 'darwin':
+        exe_dir = os.path.dirname(sys.executable)
+        app_bundle = os.path.dirname(os.path.dirname(exe_dir))
+        MAIN_DIR = os.path.dirname(app_bundle)
+    else:
+        MAIN_DIR = os.path.dirname(sys.executable)
+else:
+    MAIN_DIR = application_path
+
+prefdir = os.path.join(MAIN_DIR, 'midi_prefs.txt')
+old_prefdir = os.path.join(application_path, 'files', 'Preferences', 'prefs')
+if not os.path.exists(prefdir) and os.path.exists(old_prefdir):
+    shutil.copy2(old_prefdir, prefdir)
 
 #region ################################################# Set variables ########################################################
 midiin = rtmidi.MidiIn()
 midiout = rtmidi.MidiOut()
 indevicelist = midiin.get_ports() # list of midi input devices
 outdevicelist = midiout.get_ports()  # list of midi output devices
-prefdir='files/Preferences/prefs'
 outport = '' # selected midi out
 inport = '' # selected midi in
 datalist = []
@@ -69,7 +86,10 @@ for i in range(len(displaylist)):
     displaylist[i] = displaylist[i].rjust(18)      
 displaysqsizes = [11,24,37,50,63,76,89,102]
 copybuffer = []
+dsrmode = 2000
 #endregion
+
+
 
 #region################################################# MOUSE CALLBACKS #######################################################
 def keypresscallback(sender, app_data):
@@ -128,7 +148,7 @@ def uploadbank():
     drawcontrols()
 
 def Numericpad(sender):
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
@@ -160,6 +180,11 @@ def Numericpad(sender):
     dpg.configure_item('voicenumber',default_value = str(int(VOICENUMBER,16)).zfill(2))
     outport.send_message([status_byte, program])
     drawcontrols()
+
+def get_header1():
+    if dsrmode == 1000:
+        return 'F043730E06'
+    return 'F043730D06'
 
 def MergeHexToDec(H1,H2 = None):
     if H2 == None:
@@ -198,7 +223,7 @@ def doouterchecksum(sender):
 
 def sendmessage(MESSAGE):
     global start,end, LASTMESSAGE
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         dpg.configure_item('novoice_error', show=True)
         return
     MESSAGEok = []
@@ -220,11 +245,11 @@ def sendmessage(MESSAGE):
 
 def buildmessage(nibble1,value1, nibble2 = None, value2 = None, nibble3 = None, value3 = None):
     global datalist
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
-    HEADER1 = 'F043730D06' # header
+    HEADER1 = get_header1()
     HEADER2 = '5000000A05' # voice header
     FOOTER = 'F7'
     # extract current voice
@@ -620,7 +645,7 @@ def movejoy(dir):
         dpg.configure_item('joystick',texture_tag= 'joyright')
 
     if dir in ('left','right'):
-        if len (datalist) != 6915:
+        if len (datalist) not in (6915, 6844):
             time.sleep(.05)
             dpg.configure_item('novoice_error', show=True)
             return
@@ -883,7 +908,7 @@ def displayoctave(dir): # EDITABLE
 #region########## COMMON
 
 def Algorithm(sender):
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
@@ -918,7 +943,7 @@ def Algorithm(sender):
         sendmessage(MESSAGE)
     
 def Feedback(sender):
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
@@ -1231,7 +1256,7 @@ def SelectWaveform(sender):
         sendmessage(MESSAGE)
 
 def FixedFrequency(sender):
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
@@ -1278,7 +1303,7 @@ def FixedFrequency(sender):
         sendmessage(MESSAGE)
 
 def AmpModEnable(sender):
-    if len (datalist) != 6915:
+    if len (datalist) not in (6915, 6844):
         time.sleep(.05)
         dpg.configure_item('novoice_error', show=True)
         return
@@ -1807,7 +1832,7 @@ def loadbank():
         dpg.configure_item('data_error', show=True)
         return
     f.close()
-    if len(datalist1) == 6915:
+    if len(datalist1) in (6915, 6844):
         datalist = datalist1
         uploadbank()
 
@@ -1833,7 +1858,7 @@ def loadvoice():
     
     CURRENTVOICE = CURRENTVOICE1
     CURRENTVOICE[5] = VOICENUMBER
-    HEADER1 = 'F043730D06' # header
+    HEADER1 = get_header1()
     HEADER2 = '5000000A05' # voice header
     FOOTER = 'F7'
     VOICEDATA = ''.join(CURRENTVOICE[6:-3])
@@ -1878,7 +1903,7 @@ def exitprogram():
         pass    
     os._exit(0)
 
-########### EDIT
+########## EDIT
 def copyoperator():
     global copybuffer
     for i in range(1,5,1):
@@ -1918,7 +1943,7 @@ def pasteoperator():
     # write datalist
     datalist[4+(int(VOICENUMBER,16)*171):175+(int(VOICENUMBER,16)*171)] = CURRENTVOICE
 
-    HEADER1 = 'F043730D06' # header
+    HEADER1 = get_header1()
     HEADER2 = '5000000A05' # voice header
     FOOTER = 'F7'
     VOICEDATA = ''.join(CURRENTVOICE[6:-3])
@@ -1929,6 +1954,20 @@ def pasteoperator():
     MESSAGE = HEADER1+HEADER2+VOICENUMBER+VOICEDATA+INNERCHECKSUM+OUTERCHECKSUM+FOOTER
     sendmessage(MESSAGE)
     drawcontrols()
+
+def dsr2000mode():
+    global dsrmode
+    dsrmode = 2000
+    dpg.configure_item('dsr2000mode', label='** DSR2000 mode **')
+    dpg.configure_item('dsr1000mode', label='DSR1000 mode')
+    dpg.configure_item('logo1000_2000', texture_tag='logo2000')
+
+def dsr1000mode():
+    global dsrmode
+    dsrmode = 1000
+    dpg.configure_item('dsr2000mode', label='DSR2000 mode')
+    dpg.configure_item('dsr1000mode', label='** DSR1000 mode **')
+    dpg.configure_item('logo1000_2000', texture_tag='logo1000')
     
 ########### VOICE  
 def requestbank():
@@ -1952,8 +1991,9 @@ def requestbank():
             msg = inport.get_message()
             if msg != None:
                 # descarto mensajes que no sean bulk
-                ## en Windows lee el mensaje separado en bloques de 1024k y el ultimo es de 773k, en MAC lee un bloque de 6917k.
-                if len(msg[0]) in (6917,1024,773): 
+                ## en Windows lee el mensaje separado en bloques de 1024k y el ultimo es de 773k (DSR2000) o 702k (DSR1000).
+                ## en MAC lee un bloque de 6917k (DSR2000) o 6846k (DSR1000).
+                if len(msg[0]) in (6917,6846,1024,773,702): 
                     # convertimos a hex
                     for i in msg[0]:
                         nibble = hex(i)[2:].zfill(2).upper()
@@ -1961,7 +2001,7 @@ def requestbank():
                         voicedata.append(nibble)
                     try:
                         # si el bloque esta completo, pasamos el mensaje a foundmessage.
-                        if len(voicedata) == 6917:
+                        if len(voicedata) in (6917,6846):
                             foundmessage(voicedata)
                     except:
                         pass
@@ -1983,7 +2023,7 @@ def cancelrequest():
     if inport == '' or outport == '':
         dpg.configure_item('midi_error', show=True)
 
-########### MIDI 
+############ MIDI 
 def selectmidiin(sender):
     global inport
     try:
@@ -2053,7 +2093,6 @@ def resetmididevice():
         # Si no lo detecta, reseteo la config midi.
         dpg.configure_item('prefsio_error', show=True)
         resetmidiconfig()
-#endregion
 
 #region################################################ CREATE INTERFACE #######################################################
 dpg.create_context()
@@ -2067,7 +2106,7 @@ for i in range(1,9,1):
     with dpg.texture_registry(show=False):
         dpg.add_static_texture(width=77, height=31, default_value=data, tag='wave'+str(i))
 
-imagelist = ['button','lighton','lightoff','logo','blackpoint','handle','handlevert','fader4','fader8','fader16','fader64','greypoint2','fader8vert']
+imagelist = ['button','lighton','lightoff','logo1000','logo2000','blackpoint','handle','handlevert','fader4','fader8','fader16','fader64','greypoint2','fader8vert']
 imagelist.extend(['greypoint3','buttonsmall','whitepoint','displayarrow','fader0', 'fader0vert','fader64vert','fader16vert','screen','mono','poly'])
 imagelist.extend(['choruson','chorusoff','greypoint','OCTAVEL','OCTAVEM','OCTAVEH','joy','joyup','joydown','joyleft','joyright','SHADOW'])
 for i in range(8):
@@ -2096,6 +2135,8 @@ with dpg.window(tag='Primary Window', on_close = exitprogram):
             dpg.add_menu_item(label = 'Quit', tag='quit',callback= exitprogram)
 
         with dpg.menu(label='Edit', tag = 'edit'):
+            dpg.add_menu_item(label = '** DSR2000 mode **', tag = 'dsr2000mode', callback= dsr2000mode)
+            dpg.add_menu_item(label = 'DSR1000 mode', tag = 'dsr1000mode', callback= dsr1000mode)
             dpg.add_menu_item(label = 'Copy operator', tag = 'copyoperator', callback= copyoperator)
             dpg.add_menu_item(label = 'Paste operator', tag = 'pasteoperator', callback= pasteoperator)
 
@@ -2123,7 +2164,7 @@ with dpg.window(tag='Primary Window', on_close = exitprogram):
 
     #region DRAW TOP SCREEN
     dpg.add_image('blackpoint',pos = (0,0),width = 1300, height = 165)
-    dpg.add_image('logo',pos = (30,40),width = 961/3.3, height = 217/3.3)
+    dpg.add_image('logo2000', tag='logo1000_2000', pos = (30,40),width = 961/3.3, height = 217/3.3)
     dpg.add_image('greypoint',pos = (scp-120,43),width = 292+96,height = 114)
     dpg.add_image('screen',pos = (scp,43),width = 202, height = 114)
     dpg.add_image('mono',tag = 'displaymonopolyimg',pos = (scp,43))
@@ -2511,8 +2552,8 @@ with dpg.window(tag='Primary Window', on_close = exitprogram):
             dpg.draw_circle(center = pitchcirclelist[n],radius = 3, tag = 'pitchcircle'+str(n),color=(60,60,60),fill = (60,60,60))
 #region################################################## DIALOG WINDOWS #######################################################
 with dpg.window(label='Request bank', modal=True, show=False, tag='request_bank', no_title_bar=False, pos =[330,300],width=590,height = 350, no_resize = True, no_close = True):
-    dpg.add_text('''Please, perform a voice data dump from the DSR-2000 as follow:\n\n
-1- Press and hold the "MIDI MODE" yellow button on the DSR-2000.\n
+    dpg.add_text('''Please, perform a voice data dump from the DSR 1000/2000 as follow:\n\n
+1- Press and hold the "MIDI MODE" yellow button on the DSR 1000/2000.\n
 2- Press the "11 (salsa)" grey key from the RHYTHM COMPOSER section.\n
 3- Press the first white key on the Keyboard (C1).\n
 4- Release the yellow "MIDI MODE" key and wait 5 seconds.\n\n
@@ -2547,10 +2588,9 @@ with dpg.window(label='Error', modal=True, show=False, tag='midi_error', no_titl
 #endregion
 
 #region################################################# READ MIDI PREFS #######################################################
-if os.path.exists(prefdir) is False:
-    F = open (prefdir,'w+')
-    F.write('Not connected\nNot connected')
-    F.close()
+if not os.path.exists(prefdir):
+    with open(prefdir, 'w') as F:
+        F.write('Not connected\nNot connected')
 
 def readmidiprefs():
     global inport, outport, checkinport, checkoutport
@@ -2736,7 +2776,7 @@ with dpg.theme() as menu_theme:
         dpg.add_theme_color(dpg.mvThemeCol_PopupBg, (0, 0, 0), category=dpg.mvThemeCat_Core)
         dpg.add_theme_color(dpg.mvThemeCol_Text, (54,133,116), category=dpg.mvThemeCat_Core)
 
-menulist = ['quit','loadvoice','savevoice','loadbank','savebank','load','resetconfig','resetdevice','midi_in_menu','midi_out_menu','copyoperator','pasteoperator']
+menulist = ['quit','loadvoice','savevoice','loadbank','savebank','load','resetconfig','resetdevice','midi_in_menu','midi_out_menu','copyoperator','pasteoperator','dsr2000mode','dsr1000mode']
 for i in menulist:
     dpg.bind_item_theme(i,menu_theme)
 #endregion
