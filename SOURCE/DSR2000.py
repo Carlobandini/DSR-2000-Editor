@@ -17,7 +17,7 @@ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWE
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '''
 
-import rtmidi
+import rtmidi ## instalar pip install python-rtmidi
 import sys
 import os
 import shutil
@@ -29,8 +29,16 @@ import threading
 import numpy as np
 
 ### Set path
-application_path = os.path.dirname(os.path.abspath(__file__))
+# En .py: carpeta SOURCE. Empaquetado (PyInstaller): _MEIPASS (= _internal), donde van files/
+if getattr(sys, 'frozen', False):
+    application_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(application_path)
+
+def resource_path(*parts):
+    """Ruta absoluta a un recurso empaquetado (images, fonts, etc.)."""
+    return os.path.join(application_path, *parts)
 
 # Cuando está empaquetado (.exe / .app), los archivos dentro del bundle son de solo lectura.
 # Guardamos la config MIDI en un archivo escribible junto al ejecutable / .app.
@@ -45,7 +53,7 @@ else:
     MAIN_DIR = application_path
 
 prefdir = os.path.join(MAIN_DIR, 'midi_prefs.txt')
-old_prefdir = os.path.join(application_path, 'files', 'Preferences', 'prefs')
+old_prefdir = resource_path('files', 'Preferences', 'prefs')
 if not os.path.exists(prefdir) and os.path.exists(old_prefdir):
     shutil.copy2(old_prefdir, prefdir)
 
@@ -2101,10 +2109,10 @@ dpg.set_exit_callback(exitprogram)
 #endregion
 
 #region################################################## LOAD IMAGES ##########################################################
-for i in range(1,9,1):
-    width, height, channels, data = dpg.load_image('files/Images/W'+str(i)+'.png')
-    with dpg.texture_registry(show=False):
-        dpg.add_static_texture(width=77, height=31, default_value=data, tag='wave'+str(i))
+# Tag de textura -> nombre de archivo real en files/Images (respetar mayúsculas del disco)
+image_files = {}
+for i in range(1, 9):
+    image_files['wave' + str(i)] = 'W' + str(i) + '.png'
 
 imagelist = ['button','lighton','lightoff','logo1000','logo2000','blackpoint','handle','handlevert','fader4','fader8','fader16','fader64','greypoint2','fader8vert']
 imagelist.extend(['greypoint3','buttonsmall','whitepoint','displayarrow','fader0', 'fader0vert','fader64vert','fader16vert','screen','mono','poly'])
@@ -2117,10 +2125,22 @@ for i in range(1,5,1):
     imagelist.append('LFOW'+str(i))
 for i in range(1,9,1):
     imagelist.append('algorithm'+str(i))
-for i in imagelist:
-    width, height, channels, data = dpg.load_image('files/Images/'+i+'.png')
+
+for tag in imagelist:
+    image_files[tag] = tag + '.png'
+# Solo existe LOGO.png en el repo; se usa para ambos modos hasta que haya logos separados
+image_files['logo1000'] = 'LOGO.png'
+image_files['logo2000'] = 'LOGO.png'
+image_files['SHADOW'] = 'shadow.png'
+
+for tag, filename in image_files.items():
+    path = resource_path('files', 'Images', filename)
+    width, height, channels, data = dpg.load_image(path)
     with dpg.texture_registry(show=False):
-        dpg.add_static_texture(width=width, height=height, default_value=data, tag=i)   
+        if tag.startswith('wave'):
+            dpg.add_static_texture(width=77, height=31, default_value=data, tag=tag)
+        else:
+            dpg.add_static_texture(width=width, height=height, default_value=data, tag=tag)
 #endregion
 
 ######################################################### MAIN WINDOW ##########################################################
@@ -2783,12 +2803,15 @@ for i in menulist:
 
 #region##################################################### FONTS #############################################################
 with dpg.font_registry():
-    default_font = dpg.add_font('Files/Fonts/Freesans.ttf', 13)
-    menu_font = dpg.add_font('Files/Fonts/Freesans.ttf', 15)
-    errors_font = dpg.add_font('Files/Fonts/Freesans.ttf', 18)
-    small2_font = dpg.add_font('Files/Fonts/Freesans.ttf', 10)
-    small_font = dpg.add_font('Files/Fonts/mono.ttf',10)
-    voicefont = dpg.add_font('files/Fonts/FONT.ttf',48)
+    freesans = resource_path('files', 'Fonts', 'FreeSans.ttf')
+    monofont = resource_path('files', 'Fonts', 'mono.ttf')
+    voicefontpath = resource_path('files', 'Fonts', 'FONT.ttf')
+    default_font = dpg.add_font(freesans, 13)
+    menu_font = dpg.add_font(freesans, 15)
+    errors_font = dpg.add_font(freesans, 18)
+    small2_font = dpg.add_font(freesans, 10)
+    small_font = dpg.add_font(monofont, 10)
+    voicefont = dpg.add_font(voicefontpath, 48)
 
 dpg.bind_font(default_font)
 
