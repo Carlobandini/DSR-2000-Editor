@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+# Spec para macOS (.app). El de Windows one-file es DSR2000.spec.
 
 
 a = Analysis(
@@ -19,21 +20,33 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
     [],
+    exclude_binaries=True,
     name='DSR2000',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
-    upx_exclude=[],
-    runtime_tmpdir=None,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icon.ico'],
+    icon=['icon.icns'],
+)
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=False,
+    upx_exclude=[],
+    name='DSR2000',
+)
+app = BUNDLE(
+    coll,
+    name='DSR2000.app',
+    icon='icon.icns',
+    bundle_identifier='com.carlobandini.dsr2000',
 )

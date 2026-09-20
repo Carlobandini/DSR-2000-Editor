@@ -26,7 +26,6 @@ import filedialpy
 import time
 import json
 import threading
-import numpy as np
 
 ### Set path
 # En .py: carpeta SOURCE. Empaquetado (PyInstaller): _MEIPASS (= _internal), donde van files/

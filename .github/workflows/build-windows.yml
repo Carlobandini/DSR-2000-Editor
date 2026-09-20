@@ -1,0 +1,27 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyinstaller dearpygui python-rtmidi filedialpy
+
+      - name: Build executable
+        working-directory: SOURCE
+        run: python -m PyInstaller --noconfirm --clean DSR2000.spec
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DSR2000-Windows
+          path: SOURCE/dist/DSR2000.exe

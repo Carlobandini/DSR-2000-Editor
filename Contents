@@ -7,5 +7,5 @@ Windows app -> Windows 64bit app. Compressed.
 SOURCE -> Python source file, needs the following dependencies: 
   - Python-rtmidi
   - dearpygui
+  - filedialpy
   - json
-  - numpy
